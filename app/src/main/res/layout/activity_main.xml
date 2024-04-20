@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".ul.MainActivity"
     >
 
 
@@ -18,20 +18,21 @@
 
         <EditText
             android:id="@+id/et_message"
-            android:inputType="textShortMessage"
-            android:layout_width="match_parent"
+            android:layout_width="254dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight=".5"
             android:background="@drawable/round_button"
             android:backgroundTint="@android:color/white"
             android:hint="Escribe tu mensaje..."
+            android:inputType="textShortMessage"
             android:padding="10dp"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@android:color/black"/>
 
         <Button
             android:id="@+id/btn_send"
-            android:layout_width="match_parent"
+            android:layout_width="138dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
@@ -45,18 +46,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_messages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="653dp"
         android:layout_above="@id/ll_layout_bar"
         android:layout_below="@+id/dark_divider"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="-72dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="2dp"
         tools:itemCount="20"
         tools:listitem="@layout/message_item" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="#42A53F"
+        android:background="#00A5E3"
         android:id="@+id/dark_divider"/>
 
 
