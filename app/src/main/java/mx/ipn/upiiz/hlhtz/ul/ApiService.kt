@@ -10,4 +10,7 @@ interface ApiService {
     @GET("/chat/{message}")
     fun getGPTResponse(@Path("message") message: String): Call<String>
 
+    @GET ("/pistas")
+    fun getPistas(): Call<List<String>>
+
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,7 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         clickEvents()
 
-        saludar()
+        //saludar()
+
+        pistas()
 
     }
 
@@ -133,12 +136,29 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun pistas() {
+        GlobalScope.launch {
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                val pistas = ApiHandler.getPistas()
+
+                for (pista in pistas ){
+                    adaptarBotResponse(pista)
+                    Log.i("ADIVINA","MENSAJE DE RESPUESTA: $pista")
+                }
+            }
+        }
+    }
+
+
     private fun adaptarBotResponse(response: String) {
         val timeStamp = Time.timeStamp()
         messagesList.add(Message(response, RECEIVE_ID, timeStamp))
         adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp))
         rv_messages.scrollToPosition(adapter.itemCount - 1)
     }
+
 
 
 }
