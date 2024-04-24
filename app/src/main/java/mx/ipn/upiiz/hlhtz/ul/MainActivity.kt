@@ -44,7 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         clickEvents()
 
-        //saludar()
+        customBotMessage("¡Bienvenido! Soy Pancho, juguemos Adivina Quién, " +
+                "yo te daré las pistas y tú intenta adivinar de quién estoy hablando.\n" +
+                "¡A divertirnos aprendiendo de nuestra historia!")
 
         pistas()
 
@@ -94,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             adapter.insertMessage(Message(message, SEND_ID, timestamp))
             rv_messages.scrollToPosition(adapter.itemCount - 1)
 
-            botResponse(message)
+            //botResponse(message)
         }
 
 
@@ -103,7 +105,6 @@ class MainActivity : AppCompatActivity() {
 
         @OptIn(DelicateCoroutinesApi::class)
         private fun botResponse(message: String) {
-            val timestamp = Time.timeStamp()
             GlobalScope.launch {
                 delay(1000)
                 withContext(Dispatchers.Main) {
@@ -138,10 +139,8 @@ class MainActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     private fun pistas() {
         GlobalScope.launch {
-            delay(1000)
             withContext(Dispatchers.Main) {
                 val pistas = ApiHandler.getPistas()
-
                 for (pista in pistas ){
                     adaptarBotResponse(pista)
                     Log.i("ADIVINA","MENSAJE DE RESPUESTA: $pista")
