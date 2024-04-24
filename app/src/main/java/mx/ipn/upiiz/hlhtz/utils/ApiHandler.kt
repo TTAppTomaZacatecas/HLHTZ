@@ -62,8 +62,6 @@ object ApiHandler {
     }
 
 
-
-
     suspend fun getPistas(): List <String> {
         val apiService = retrofit.create(ApiService::class.java)
 
