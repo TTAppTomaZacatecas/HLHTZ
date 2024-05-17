@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() { //Coroutine
             adapter.insertMessage(Message(message, SEND_ID, timestamp))
             rv_messages.scrollToPosition(adapter.itemCount - 1)
 
-            //botResponse(message)
+            botResponse(message)
         }
 
 
@@ -121,8 +121,8 @@ class MainActivity : AppCompatActivity() { //Coroutine
             GlobalScope.launch {
                 delay(1000)
                 withContext(Dispatchers.Main) {
-                    val response: String = ApiHandler.sendMessageToGPT(message)
-                    Log.i("ADIVINA","MENSAJE DE RESPUESTA: $response")
+                    val response: String = ApiHandler.sendUserResponse(message)
+                    Log.i("ADIVINA","Respuesta del bot: $response")
                     adaptarBotResponse(response)
                 }
             }

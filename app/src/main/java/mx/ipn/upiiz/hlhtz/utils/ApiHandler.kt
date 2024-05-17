@@ -15,13 +15,14 @@ object ApiHandler {
 
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.100.251:8002/")
+        .baseUrl("http://192.168.100.251:8001/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val responseSaludo = Channel<String>()
     private val responsePistas = Channel<List<String>>()
+    private val responseResult = Channel<String>()
 
 
 
@@ -79,6 +80,23 @@ object ApiHandler {
 
         // Wait for the response to be received on the channel
         return responsePistas.receive()
+    }
+
+    suspend fun sendUserResponse(message: String): String {
+        val apiService = retrofit.create(ApiService::class.java)
+        // Start a new coroutine to make the network call
+        scope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    apiService.getUserResponseResult(message).await()
+                }
+                responseResult.send(response)
+            } catch (e: Exception) {
+                responseResult.send("Error: ${e.message}")
+            }
+        }
+        // Wait for the response to be received on the channel
+        return responseResult.receive()
     }
 
 }
