@@ -4,14 +4,18 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar;
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,16 +26,22 @@ import mx.ipn.upiiz.hlhtz.utils.ApiHandler
 import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
 import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
 import mx.ipn.upiiz.hlhtz.utils.Time
+import kotlin.coroutines.CoroutineContext
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() { //Coroutine
 
     private lateinit var adapter: MessagingAdapter
     private lateinit var btn_send: Button
     private lateinit var et_message: EditText
     private lateinit var rv_messages: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    //private lateinit var job:Job
+
 
     var messagesList = mutableListOf<Message>()
+    //override val coroutineContext: CoroutineContext
+     //   get() = Dispatchers.Main + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         rv_messages = findViewById(R.id.rv_messages)
         btn_send = findViewById(R.id.btn_send)
         et_message = findViewById(R.id.et_message)
+        progressBar = findViewById(R.id.progressBar)
+       // job = Job()
+
 
         recyclerview()
 
@@ -135,17 +148,43 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    /*
+       override fun onDestroy() {
+           super.onDestroy()
+           job.cancel()
+       }
+
+     @OptIn(DelicateCoroutinesApi::class)
+       private fun pistas() {
+           launch {
+               progressBar.visibility = View.VISIBLE
+               val pistas = withContext(Dispatchers.IO) {
+                   ApiHandler.getPistas()
+               }
+               for (pista in pistas) {
+                   adaptarBotResponse(pista)
+                   Log.i("ADIVINA", "MENSAJE DE RESPUESTA: $pista")
+               }
+               progressBar.visibility = View.GONE
+           }
+       }*/
+
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun pistas() {
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-                val pistas = ApiHandler.getPistas()
-                for (pista in pistas ){
-                    adaptarBotResponse(pista)
-                    Log.i("ADIVINA","MENSAJE DE RESPUESTA: $pista")
-                }
+                progressBar.visibility = View.VISIBLE
             }
+                val pistas = ApiHandler.getPistas()
+            withContext(Dispatchers.Main){
+                for (pista in pistas ) {
+                    adaptarBotResponse(pista)
+                    Log.i("ADIVINA", "MENSAJE DE RESPUESTA: $pista")
+                }
+                progressBar.visibility = View.GONE
+            }
+
         }
     }
 

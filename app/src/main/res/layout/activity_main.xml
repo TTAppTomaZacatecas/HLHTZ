@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ul.MainActivity"
-    >
+    android:visibility="visible"
+    tools:context=".ul.MainActivity">
 
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:inputType="textShortMessage"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black" />
 
         <Button
             android:id="@+id/btn_send"
@@ -37,9 +37,15 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/round_button"
-            android:backgroundTint="#000099"
+            android:backgroundTint="#FF5722"
             android:text="Enviar"
             android:textColor="@android:color/white" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -51,14 +57,29 @@
         android:layout_below="@+id/dark_divider"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="2dp"
+        android:background="@drawable/catedral_prueba"
         tools:itemCount="20"
-        tools:listitem="@layout/message_item" />
+        tools:listitem="@layout/message_item"/>
 
     <View
+        android:id="@+id/dark_divider"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="#00A5E3"
-        android:id="@+id/dark_divider"/>
+        android:layout_height="40dp"
+        android:background="#00A5E3" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="¿QUIEN HIZO QUE?"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="35dp"
+        android:textStyle="bold|italic" />
+
+
 
 
 </RelativeLayout>
