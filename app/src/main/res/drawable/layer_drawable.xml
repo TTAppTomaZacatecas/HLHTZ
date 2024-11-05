@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Primera capa: color de fondo
+        <item android:drawable="@color/white" />-->
+
+        <!-- Segunda capa: ícono centrado con tamaño personalizado -->
+        <item
+            android:drawable="@drawable/pixil_gif_drawing_unscreen"
+            android:width="25dp"
+            android:height="25dp"
+
+
+        />
+
+
+</layer-list>
