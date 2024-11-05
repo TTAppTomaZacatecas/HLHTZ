@@ -16,10 +16,19 @@ import mx.ipn.upiiz.hlhtz.R
 import mx.ipn.upiiz.hlhtz.date.Message
 import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
 import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
+import kotlin.random.Random
 
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
 
     var messageList = mutableListOf<Message>()
+
+    // Lista de recursos de GIFs
+    private val gifList = listOf(
+        R.drawable.militar_saludando_unscreen,
+        R.drawable.mujer_saludo_unscreen,
+        R.drawable.adelita_saludando_unscreen,
+        R.drawable.hombre_saludo_unscreen
+    )
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv_message: TextView = itemView.findViewById(R.id.tv_message)
@@ -47,50 +56,36 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val currentMessage = messageList[position]
 
-        Debug.logStack("Hola","CANTIDAD DE SMS "+ position, 5)
-
         when (currentMessage.id) {
-            SEND_ID -> {//verde
+            SEND_ID -> { // Mensaje enviado
                 holder.tv_message.apply {
                     text = currentMessage.message
                     visibility = View.VISIBLE
                 }
                 holder.tv_bot_message.visibility = View.GONE
-              holder.imgGif.layoutParams.width=400
-                holder.imgGif.layoutParams.height=30
+                holder.imgGif.visibility = View.GONE // Ocultar el GIF en mensajes enviados
             }
-            RECEIVE_ID -> {//rojo
+            RECEIVE_ID -> { // Mensaje recibido
                 holder.tv_bot_message.apply {
                     text = currentMessage.message
                     visibility = View.VISIBLE
-                    holder.tv_message.visibility = View.GONE
-
-                    if (position==0){
-                        holder.imgGif.layoutParams.width=400
-
-                        }
-                    else{
-                        holder.imgGif.layoutParams.width=0
-                        holder.imgGif.layoutParams.height=30
-
-
-                        }
                 }
+                holder.tv_message.visibility = View.GONE
 
-
+                // Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
+                if (position == 0) {
+                    val randomGif = gifList[Random.nextInt(gifList.size)]
+                    holder.imgGif.apply {
+                        setImageResource(randomGif)
+                        visibility = View.VISIBLE
+                    }
+                } else {
+                    holder.imgGif.visibility = View.GONE
+                }
             }
-
         }
-        if (position==0){
-            holder.imgGif.visibility = View.VISIBLE
-            currentMessage.isGifShown = true
+    }
 
-        } else{
-            holder.imgGif.visibility = View.INVISIBLE
-
-           // holder.imgGif.layoutParams.width=0
-
-        }
 
 
         /*if (position>=1){
@@ -104,7 +99,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
 
 
 
-    }
+
 
     fun insertMessage(message: Message) {
         this.messageList.add(message)
