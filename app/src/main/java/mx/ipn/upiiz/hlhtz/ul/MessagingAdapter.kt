@@ -1,15 +1,11 @@
 package mx.ipn.upiiz.hlhtz.ul
 
 import android.annotation.SuppressLint
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.motion.widget.Debug
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import mx.ipn.upiiz.hlhtz.R
@@ -17,7 +13,6 @@ import mx.ipn.upiiz.hlhtz.date.Message
 import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
 import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
 import kotlin.random.Random
-
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
 
     var messageList = mutableListOf<Message>()
@@ -29,19 +24,19 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         R.drawable.adelita_saludando_unscreen,
         R.drawable.hombre_saludo_unscreen
     )
+    private  val iconList = listOf(
+        R.drawable.layer_drawable_militar,
+        R.drawable.layer_drawable_mujer,
+        R.drawable.layer_drawable_adelita,
+        R.drawable.layer_drawable_gerrillero
+
+    )
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv_message: TextView = itemView.findViewById(R.id.tv_message)
         val tv_bot_message: TextView = itemView.findViewById(R.id.tv_bot_message)
         val imgGif: ImageView = itemView.findViewById(R.id.gifImageView)
-
-        // Elimina el listener que elimina los mensajes
-        init {
-            // itemView.setOnClickListener {
-            //     messageList.removeAt(adapterPosition)
-            //     notifyItemRemoved(adapterPosition)
-            // }
-        }
+        val icono: ImageView = itemView.findViewById(R.id.icono)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -63,7 +58,10 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                     visibility = View.VISIBLE
                 }
                 holder.tv_bot_message.visibility = View.GONE
-                holder.imgGif.visibility = View.GONE // Ocultar el GIF en mensajes enviados
+                holder.imgGif.layoutParams.width = 400
+                holder.imgGif.layoutParams.height= 0
+                holder.icono.visibility = View.GONE
+               // holder.imgGif.visibility = View.GONE // Ocultar el GIF en mensajes enviados
             }
             RECEIVE_ID -> { // Mensaje recibido
                 holder.tv_bot_message.apply {
@@ -72,34 +70,27 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                 }
                 holder.tv_message.visibility = View.GONE
 
-                // Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
+
+
+                //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
                     val randomGif = gifList[Random.nextInt(gifList.size)]
+                    val randomIcono = iconList[Random.nextInt(iconList.size)]
                     holder.imgGif.apply {
                         setImageResource(randomGif)
                         visibility = View.VISIBLE
                     }
+                    holder.icono.visibility = View.GONE
+
                 } else {
                     holder.imgGif.visibility = View.GONE
+                    holder.icono.visibility = View.VISIBLE
+
+
                 }
             }
         }
     }
-
-
-
-        /*if (position>=1){
-          holder.tv_bot_message.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-               LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply{
-               //gravity = Gravity.START
-           }*/
-
-
-
-
-
 
     fun insertMessage(message: Message) {
         this.messageList.add(message)

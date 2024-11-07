@@ -5,7 +5,7 @@
 
         <!-- Segunda capa: ícono centrado con tamaño personalizado -->
         <item
-            android:drawable="@drawable/pixil_gif_drawing_unscreen"
+            android:drawable="@drawable/militar_saludando_unscreen"
             android:width="20dp"
             android:height="20dp"
 
