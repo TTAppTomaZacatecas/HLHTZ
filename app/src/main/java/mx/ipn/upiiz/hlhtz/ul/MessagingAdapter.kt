@@ -16,7 +16,7 @@ import kotlin.random.Random
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
 
     var messageList = mutableListOf<Message>()
-
+    var randomGif = Random.nextInt(4)
     // Lista de recursos de GIFs
     private val gifList = listOf(
         R.drawable.militar_saludando_unscreen,
@@ -74,10 +74,10 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
 
                 //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
-                    val randomGif = gifList[Random.nextInt(gifList.size)]
-                    val randomIcono = iconList[Random.nextInt(iconList.size)]
+
+
                     holder.imgGif.apply {
-                        setImageResource(randomGif)
+                        setImageResource(gifList.get(randomGif))
                         visibility = View.VISIBLE
                     }
                     holder.icono.visibility = View.GONE
@@ -85,9 +85,14 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                 } else {
                     holder.imgGif.visibility = View.GONE
                     holder.icono.visibility = View.VISIBLE
+                    holder.icono.apply {
+                        setImageResource(iconList.get(randomGif))
+                    }
 
 
                 }
+
+
             }
         }
     }
