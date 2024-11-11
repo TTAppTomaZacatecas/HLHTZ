@@ -17,4 +17,7 @@ interface ApiService {
     @GET("/respuesta/{respuesta_user}")
     fun getUserResponseResult(@Path("respuesta_user") respuesta_user: String): Call<String>
 
+    @GET("/nuevo_juego")
+    fun getNewPlay(): Call<List<String>>
+
 }

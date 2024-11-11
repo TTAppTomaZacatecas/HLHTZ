@@ -191,8 +191,6 @@ class MainActivity : AppCompatActivity (){
 
     private fun adaptarBotResponse(response: String) {
         val timeStamp = Time.timeStamp()
-
-
         messagesList.add(Message(response, RECEIVE_ID, timeStamp))
         adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp))
         rv_messages.scrollToPosition(adapter.itemCount - 1)

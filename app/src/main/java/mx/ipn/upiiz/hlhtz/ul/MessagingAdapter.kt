@@ -16,6 +16,7 @@ import kotlin.random.Random
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
 
     var messageList = mutableListOf<Message>()
+    // varibale de random para gif e iconos
     var randomGif = Random.nextInt(4)
     // Lista de recursos de GIFs
     private val gifList = listOf(
@@ -24,6 +25,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         R.drawable.adelita_saludando_unscreen,
         R.drawable.hombre_saludo_unscreen
     )
+    //Lista de recursos iconos
     private  val iconList = listOf(
         R.drawable.layer_drawable_militar,
         R.drawable.layer_drawable_mujer,
@@ -31,12 +33,31 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         R.drawable.layer_drawable_gerrillero
 
     )
+    //lista de gif correcto
+    private val gifListCorrect = listOf(
+        R.drawable.militar_celebrando_unscreen,
+        R.drawable.epoca_correcta_unscreen,
+        R.drawable.adelita_celebrando_unscreen,
+        R.drawable.gerrillero_celebrando
+
+
+    )
+    //Lista de incorrecto
+    private val gifListIncorrect = listOf(
+        R.drawable.militar_incorrecto_unscreen,
+        R.drawable.epoca_incorrecta_unscreen,
+        R.drawable.adelita_triste_unscreen,
+        R.drawable.geriller_triste
+
+    )
+
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv_message: TextView = itemView.findViewById(R.id.tv_message)
         val tv_bot_message: TextView = itemView.findViewById(R.id.tv_bot_message)
         val imgGif: ImageView = itemView.findViewById(R.id.gifImageView)
         val icono: ImageView = itemView.findViewById(R.id.icono)
+        //val respuesta : ImageView = itemView.findViewById(R.id.)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -47,9 +68,41 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         return messageList.size
     }
 
+    //Funcion para verificar si se encuentra la palabra correcto/incorrecto
+    fun checkMessageKeywords(holder: MessageViewHolder, message: Message) {
+        val INCORRECT = "ncorrect"
+        val CORRECT = "orrect"
+
+        if (message.message.contains(INCORRECT)) {
+           // println("Mensaje incorrecto detectado: ${message.message}")
+
+            holder.imgGif.apply {
+                setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                visibility = View.VISIBLE
+            }
+            holder.icono.visibility = View.GONE  // Opcional: ocultar el ícono si es incorrecto
+
+        } else if (message.message.contains(CORRECT)) {
+           // println("Mensaje correcto detectado: ${message.message}")
+
+            holder.imgGif.apply {
+                setImageResource(gifListCorrect[randomGif])  // Asigna GIF de correcto
+                visibility = View.VISIBLE
+            }
+            holder.icono.visibility = View.GONE  // Opcional: ocultar el ícono si es correcto
+
+        } else {
+            //println("El mensaje no contiene ninguna palabra clave")
+            holder.imgGif.visibility = View.GONE  // Ocultar GIF si no hay coincidencia
+            holder.icono.visibility = View.VISIBLE  // Mostrar el ícono si no hay coincidencia
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val currentMessage = messageList[position]
+
+        //val  palabra = "incorrecto"
 
         when (currentMessage.id) {
             SEND_ID -> { // Mensaje enviado
@@ -63,7 +116,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                 holder.icono.visibility = View.GONE
                // holder.imgGif.visibility = View.GONE // Ocultar el GIF en mensajes enviados
             }
-            RECEIVE_ID -> { // Mensaje recibido
+            RECEIVE_ID -> { // Mensaje recibido  //tipo de respuesya
                 holder.tv_bot_message.apply {
                     text = currentMessage.message
                     visibility = View.VISIBLE
@@ -88,6 +141,8 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                     holder.icono.apply {
                         setImageResource(iconList.get(randomGif))
                     }
+                    // Selecciona GIF o ícono según el contenido del mensaje
+                    checkMessageKeywords(holder, currentMessage)
 
 
                 }
