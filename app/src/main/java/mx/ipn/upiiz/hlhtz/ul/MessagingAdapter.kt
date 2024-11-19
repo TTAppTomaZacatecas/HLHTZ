@@ -12,12 +12,14 @@ import mx.ipn.upiiz.hlhtz.R
 import mx.ipn.upiiz.hlhtz.date.Message
 import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
 import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
+import org.w3c.dom.Text
 import kotlin.random.Random
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
 
     var messageList = mutableListOf<Message>()
     // varibale de random para gif e iconos
     var randomGif = Random.nextInt(4)
+
     // Lista de recursos de GIFs
     private val gifList = listOf(
         R.drawable.militar_saludando_unscreen,
@@ -49,6 +51,13 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         R.drawable.adelita_triste_unscreen,
         R.drawable.geriller_triste
 
+    )
+    //lista de string
+    private val mensajePrincipal = listOf(
+        "¡Soldados, al frente! Aquí está Crecencio,el General, un hombre que lucha por el orden y la paz en el país desde las trincheras federales.",
+        "Buenas tardes, paisanos. Soy Carmen una mujer de esta tierra herida por la guerra, pero llena de esperanza. En el campo y en el hogar, lucho por un mejor porvenir para nuestras familias y por la paz que tanto anhelamos.",
+        "¡Saludos, camaradas! Soy Lupita una Adelita, valiente y leal. Lucho junto a mis compañeros para forjar un México más justo, llevando en mi corazón la fuerza y la dignidad de las mujeres revolucionarias.",
+        "¡Viva la lucha por la libertad! Soy Urbano un guerrillero al servicio de la causa, armado con coraje y esperanza, listo para defender la tierra y la justicia del pueblo."
     )
 
 
@@ -125,10 +134,13 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
 
 
 
+
                 //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
-
-
+                    holder.tv_bot_message.apply {
+                        text = mensajePrincipal.get(randomGif)
+                        visibility = View.VISIBLE
+                    }
                     holder.imgGif.apply {
                         setImageResource(gifList.get(randomGif))
                         visibility = View.VISIBLE
@@ -151,7 +163,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
             }
         }
     }
-
+//insertar mensaje
     fun insertMessage(message: Message) {
         this.messageList.add(message)
         notifyItemInserted(messageList.size)

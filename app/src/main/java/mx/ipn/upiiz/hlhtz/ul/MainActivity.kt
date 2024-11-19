@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity (){
         recyclerview()
 
         clickEvents()
-
-        customBotMessage("¡Bienvenido! Soy Pancho, juguemos Adivina Quién, " +
+//Mensaje de bienvenida del personaje princial
+        /*customBotMessage("¡Bienvenido! Soy Pancho, juguemos Adivina Quién, " +
                 "yo te daré las pistas y tú intenta adivinar de quién estoy hablando.\n" +
-                "¡A divertirnos aprendiendo de nuestra historia!")
+                "¡A divertirnos aprendiendo de nuestra historia!")*/
 
         pistas()
 
@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity (){
             sendMessage()
         }
         // al darle click en espacio de texto se desencadena un desplazamiento  para el campo de texto
-        // al darle click en espacio de texto se desencadena un desplazamiento  para el campo de text
         et_message.setOnClickListener {
             GlobalScope.launch {
                 delay(100)
