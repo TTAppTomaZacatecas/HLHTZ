@@ -13,7 +13,6 @@ import mx.ipn.upiiz.hlhtz.R
 import mx.ipn.upiiz.hlhtz.date.Message
 import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
 import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
-import org.w3c.dom.Text
 import kotlin.random.Random
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
 
@@ -22,6 +21,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     var randomGif = Random.nextInt(4)
     var contadorRespuestasIncorrectas = 0
     var numMaxRespuestasIncorrectasPermitidas = 3
+    var gamingInstance = -1
 
     // Lista de recursos de GIFs
     private val gifList = listOf(
@@ -230,9 +230,6 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     fun identificarPatronResponseAI(responseAI: String?): String {
         // Validamos si la respuesta es nula o vacía
         if (responseAI.isNullOrBlank()) return "SIN_PATRON"
-        // Definimos las palabras clave para cada patrón
-
-
         // Convertimos la respuesta a minúsculas para comparación
         val respuestaLower = responseAI.lowercase()
         // Verificamos cada patrón
@@ -270,10 +267,6 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                     visibility = View.VISIBLE
                 }
                 holder.tv_message.visibility = View.GONE
-
-
-
-
                 //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
                     holder.tv_bot_message.apply {
@@ -303,8 +296,9 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         }
     }
 //insertar mensaje
-    fun insertMessage(message: Message) {
+    fun insertMessage(message: Message, gamingInstance: Int) {
         this.messageList.add(message)
+        this.gamingInstance = gamingInstance
         notifyItemInserted(messageList.size)
     }
 }

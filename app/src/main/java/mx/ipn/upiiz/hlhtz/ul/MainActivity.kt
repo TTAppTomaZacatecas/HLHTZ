@@ -1,6 +1,4 @@
 package mx.ipn.upiiz.hlhtz.ul
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,12 +8,9 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,7 +20,6 @@ import mx.ipn.upiiz.hlhtz.utils.ApiHandler
 import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
 import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
 import mx.ipn.upiiz.hlhtz.utils.Time
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity (){
 //Coroutine
@@ -107,7 +101,7 @@ class MainActivity : AppCompatActivity (){
             messagesList.add(Message(message, SEND_ID, timestamp))
             et_message.setText("")
 
-            adapter.insertMessage(Message(message, SEND_ID, timestamp))
+            adapter.insertMessage(Message(message, SEND_ID, timestamp),)
             rv_messages.scrollToPosition(adapter.itemCount - 1)
 
             botResponse(message)
@@ -203,7 +197,7 @@ class MainActivity : AppCompatActivity (){
     private fun adaptarBotResponse(response: String) {
         val timeStamp = Time.timeStamp()
         messagesList.add(Message(response, RECEIVE_ID, timeStamp))
-        adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp))
+        adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp), gamingInstance)
         rv_messages.scrollToPosition(adapter.itemCount -1)
     }
 
