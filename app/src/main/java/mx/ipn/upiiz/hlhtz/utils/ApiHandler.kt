@@ -13,19 +13,22 @@ object ApiHandler {
 
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.1.141.134:8001/")
+        .baseUrl("https://hlhtz-api-1.onrender.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val responseSaludo = Channel<String>()
     private val responsePistas = Channel<List<String>>()
-    private val responseResult = Channel<String>()
+    private val responseResultProcessResponseUser = Channel<String>()
+    private val responseGamingInstance = Channel<Int>()
+    private val responseNewGame = Channel<List<String>>()
+
+    private val apiService = retrofit.create(ApiService::class.java)
 
 
 
     suspend fun sendMessageToGPT(message: String): String {
-        val apiService = retrofit.create(ApiService::class.java)
         // Start a new coroutine to make the network call
         scope.launch {
             try {
@@ -42,8 +45,6 @@ object ApiHandler {
     }
 
     suspend fun saludoDelBot(): String {
-        val apiService = retrofit.create(ApiService::class.java)
-
         // Start a new coroutine to make the network call
         scope.launch {
             try {
@@ -61,14 +62,29 @@ object ApiHandler {
     }
 
 
-    suspend fun getPistas(): List <String> {
-        val apiService = retrofit.create(ApiService::class.java)
-
+    suspend fun getGamingInstance(): Int {
         // Start a new coroutine to make the network call
         scope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    apiService.getPistas().await()
+                    apiService.getGamingInstance().await()
+                }
+                responseGamingInstance.send(response)
+            } catch (e: Exception) {
+                responseGamingInstance.send(0)
+            }
+        }
+        // Wait for the response to be received on the channel
+        return responseGamingInstance.receive()
+    }
+
+
+    suspend fun getPistas(gamingInstance: Int): List <String> {
+        // Start a new coroutine to make the network call
+        scope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    apiService.getPistas(gamingInstance).await()
                 }
                 responsePistas.send(response)
             } catch (e: Exception) {
@@ -80,21 +96,37 @@ object ApiHandler {
         return responsePistas.receive()
     }
 
-    suspend fun sendUserResponse(message: String): String {
-        val apiService = retrofit.create(ApiService::class.java)
+    suspend fun sendUserResponse(gamingInstance: Int, message: String): String {
         // Start a new coroutine to make the network call
         scope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    apiService.getUserResponseResult(message).await()
+                    apiService.getUserResponseResult(gamingInstance, message).await()
                 }
-                responseResult.send(response)
+                responseResultProcessResponseUser.send(response)
             } catch (e: Exception) {
-                responseResult.send("Error: ${e.message}")
+                responseResultProcessResponseUser.send("Error: ${e.message}")
             }
         }
         // Wait for the response to be received on the channel
-        return responseResult.receive()
+        return responseResultProcessResponseUser.receive()
+    }
+
+
+    suspend fun initNewPlay(gamingInstance: Int): List <String> {
+        // Start a new coroutine to make the network call
+        scope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    apiService.initNewPlay(gamingInstance).await()
+                }
+                responseNewGame.send(response)
+            } catch (e: Exception) {
+                responseNewGame.send(listOf("Error: ${e.message}"))
+            }
+        }
+        // Wait for the response to be received on the channel
+        return responseNewGame.receive()
     }
 
 }

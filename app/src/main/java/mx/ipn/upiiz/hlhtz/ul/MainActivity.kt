@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity (){
     private lateinit var et_message: EditText
     private lateinit var rv_messages: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private var gamingInstance = -1
     //private lateinit var job:Job
 
 
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity (){
         /*customBotMessage("¡Bienvenido! Soy Pancho, juguemos Adivina Quién, " +
                 "yo te daré las pistas y tú intenta adivinar de quién estoy hablando.\n" +
                 "¡A divertirnos aprendiendo de nuestra historia!")*/
-
+        setGamingInstance()
         pistas()
 
     }
@@ -121,12 +122,23 @@ class MainActivity : AppCompatActivity (){
         GlobalScope.launch {
             delay(1000)
             withContext(Dispatchers.Main) {
-                val response: String = ApiHandler.sendUserResponse(message)
+                val response: String = ApiHandler.sendUserResponse(gamingInstance, message)
                 Log.i("ADIVINA","Respuesta del bot: $response")
                 adaptarBotResponse(response)
             }
         }
     }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun setGamingInstance() {
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                gamingInstance = ApiHandler.getGamingInstance()
+                Log.i("ADIVINA","Gaming instance: $gamingInstance")
+            }
+        }
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     private fun customBotMessage(message: String) {
         GlobalScope.launch {
@@ -176,7 +188,7 @@ class MainActivity : AppCompatActivity (){
             withContext(Dispatchers.Main) {
                 progressBar.visibility = View.VISIBLE
             }
-            val pistas = ApiHandler.getPistas()
+            val pistas = ApiHandler.getPistas(gamingInstance)
             withContext(Dispatchers.Main){
                 for (pista in pistas ) {
                     adaptarBotResponse(pista)
@@ -192,7 +204,7 @@ class MainActivity : AppCompatActivity (){
         val timeStamp = Time.timeStamp()
         messagesList.add(Message(response, RECEIVE_ID, timeStamp))
         adapter.insertMessage(Message(response, RECEIVE_ID, timeStamp))
-        rv_messages.scrollToPosition(adapter.itemCount - 1)
+        rv_messages.scrollToPosition(adapter.itemCount -1)
     }
 
 
