@@ -1,4 +1,5 @@
 package mx.ipn.upiiz.hlhtz.ul
+import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -49,13 +50,10 @@ class MainActivity : AppCompatActivity (){
 
         recyclerview()
 
-        clickEvents()
-//Mensaje de bienvenida del personaje princial
-        /*customBotMessage("¡Bienvenido! Soy Pancho, juguemos Adivina Quién, " +
-                "yo te daré las pistas y tú intenta adivinar de quién estoy hablando.\n" +
-                "¡A divertirnos aprendiendo de nuestra historia!")*/
+
         setGamingInstance()
         pistas()
+        clickEvents()
 
     }
 
@@ -79,6 +77,7 @@ class MainActivity : AppCompatActivity (){
         adapter = MessagingAdapter()
         rv_messages.adapter = adapter
         rv_messages.layoutManager = LinearLayoutManager(applicationContext)
+
     }
 
     override fun onStart() {
@@ -100,9 +99,8 @@ class MainActivity : AppCompatActivity (){
         if (message.isNotEmpty()){
             messagesList.add(Message(message, SEND_ID, timestamp))
             et_message.setText("")
-
-            adapter.insertMessage(Message(message, SEND_ID, timestamp),)
-            rv_messages.scrollToPosition(adapter.itemCount - 1)
+            adapter.insertMessage(Message(message, SEND_ID, timestamp), gamingInstance)
+            rv_messages.scrollToPosition(adapter.itemCount -1)
 
             botResponse(message)
         }
@@ -184,11 +182,17 @@ class MainActivity : AppCompatActivity (){
             }
             val pistas = ApiHandler.getPistas(gamingInstance)
             withContext(Dispatchers.Main){
+                adaptarBotResponse("Hola")
                 for (pista in pistas ) {
-                    adaptarBotResponse(pista)
-                    Log.i("ADIVINA", "MENSAJE DE RESPUESTA: $pista")
+                    // Verificar si el número de mensajes ya es mayor a 1 (no el primer mensaje)
+
+                        adaptarBotResponse(pista)
+                        Log.i("ADIVINA", "MENSAJE DE RESPUESTA: $pista")
+
                 }
+
                 progressBar.visibility = View.GONE
+
             }
 
         }

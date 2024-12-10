@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.motion.widget.Debug
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import mx.ipn.upiiz.hlhtz.R
@@ -22,6 +23,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     var contadorRespuestasIncorrectas = 0
     var numMaxRespuestasIncorrectasPermitidas = 3
     var gamingInstance = -1
+
 
     // Lista de recursos de GIFs
     private val gifList = listOf(
@@ -64,16 +66,12 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     )
 
     val patronCorrecto = listOf(
-        "¡Correcto!",
-        "Has adivinado",
-        "100%",
-        "Respuesta correcta",
-        "¡Exacto!",
+        "¡Correcto!, has adivinado",
+        "¡Exacto!, Respuesta correcta",
         "¡Eso es!",
         "¡Perfecto!",
         "¡Así es!",
         "¡Muy bien, lo lograste!",
-        "¡Lo clavaste!",
         "¡Justo en el blanco!",
         "¡Eso era lo que buscábamos!",
         "¡Correctísimo!",
@@ -91,75 +89,88 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     )
 
     val patronIncorrecto = listOf(
-        "incorrecto",
-        "incorrecta",
-        "no es",
-        "intenta de nuevo",
-        "no es correcto",
-        "no, esa no es la respuesta",
-        "lo siento, pero no es correcto",
-        "esa no es la opción correcta",
-        "no es la respuesta que buscábamos",
-        "sigue intentando, esa no es",
-        "por ahí no va",
-        "no acertaste esta vez",
-        "eso no es, prueba otra vez",
-        "estás lejos de la respuesta correcta",
-        "no, intenta con otra opción",
-        "no es lo que esperaba",
-        "esa no es la solución correcta",
-        "cerca, pero no es esa",
-        "no, sigue pensando",
-        "todavía no, dale otra vuelta",
-        "no, no va por ahí",
-        "lamentablemente, no es correcto",
-        "esa no es la respuesta adecuada",
-        "no, prueba de nuevo",
-        "negativo, esa no es"
+        "Incorrecto",
+        "Incorrecta",
+        "No es, intenta de nuevo",
+        "No es correcto",
+        "No, esa no es la respuesta",
+        "Lo siento, pero no es correcto",
+        "Esa no es la opción correcta",
+        "No es la respuesta que buscábamos",
+        "Sigue intentando, esa no es",
+        "Por ahí no va",
+        "No acertaste esta vez",
+        "Eso no es, prueba otra vez",
+        "Estás lejos de la respuesta correcta",
+        "No, intenta con otra opción",
+        "No es lo que esperaba",
+        "Esa no es la solución correcta",
+        "Cerca, pero no es esa",
+        "No, sigue pensando",
+        "Todavía no, dale otra vuelta",
+        "No, no va por ahí",
+        "Lamentablemente, no es correcto",
+        "Esa no es la respuesta adecuada",
+        "No, prueba de nuevo",
+        "Negativo, esa no es"
+    )
+    val intentaloNuevamente = listOf(
+        "¡Estás cerca! Cada intento te hace mejorar. No te rindas, ¡tú puedes lograrlo!",
+        "¡Gran avance! Ya estás más cerca de la solución. Inténtalo de nuevo, ¡esta vez puede ser la vencida!",
+        "Tu dedicación es impresionante. ¡Sigue intentándolo, cada paso te lleva más cerca de la meta!",
+        "Sé que este desafío no es fácil, pero tienes todo lo necesario para superarlo. ¡No te detengas ahora!",
+        "¡Cada intento es una lección! Lo estás haciendo genial, y pronto verás los resultados."
+
+    )
+    val exedisteRespuesta = listOf(
+        "Te has exedido de respuestas",
+        "Suerte para la proxima",
+        "¡No te rindas! La práctica te llevará a la victoria.",
+        "¡Ups! Parece que has usado todas tus oportunidades por ahora.",
+        "¡Se acabaron tus intentos!"
     )
 
     val patronCasiCorrecto = listOf(
-        "vas por el camino correcto",
-        "estás en el camino correcto",
+        "Vas por el camino correcto",
+        "Estás en el camino correcto",
         "¿Tienes más pistas o te atreves a dar una respuesta más específica?",
-        "probabilidad de acierto es",
-        "cerca",
-        "estás muy cerca, sigue pensando",
-        "eso tiene sentido, pero falta un poco más",
-        "vas bien, ¿quieres ajustar un poco más la idea?",
-        "no estás lejos de la respuesta correcta",
-        "¡casi lo tienes! dale otra vuelta",
-        "es un buen intento, pero necesitas afinar un poco más",
-        "estás rozando la respuesta, pero aún no llegas",
-        "¡muy buen razonamiento! solo falta un detalle",
-        "casi perfecto, estás a un paso",
-        "buena dirección, pero puedes ser más preciso",
-        "¡estás cerca! ¿qué crees que falta?",
-        "eso tiene mucho sentido, pero no es la respuesta completa",
-        "un poco más y lo consigues",
-        "tienes la idea, pero no del todo. ¿quieres intentarlo de nuevo?",
-        "interesante enfoque, pero no es exactamente lo que buscábamos. ¡casi!"
+        "Cerca",
+        "Estás muy cerca, sigue pensando",
+        "Eso tiene sentido, pero falta un poco más",
+        "Vas bien, ¿quieres ajustar un poco más la idea?",
+        "No estás lejos de la respuesta correcta",
+        "¡Casi lo tienes! dale otra vuelta",
+        "Es un buen intento, pero necesitas afinar un poco más",
+        "Estás rozando la respuesta, pero aún no llegas",
+        "¡Muy buen razonamiento! solo falta un detalle",
+        "Casi perfecto, estás a un paso",
+        "Buena dirección, pero puedes ser más preciso",
+        "¡Estás cerca! ¿qué crees que falta?",
+        "Eso tiene mucho sentido, pero no es la respuesta completa",
+        "Un poco más y lo consigues",
+        "Tienes la idea, pero no del todo. ¿quieres intentarlo de nuevo?",
+        "Interesante enfoque, pero no es exactamente lo que buscábamos. ¡casi!"
     )
 
     val patronRendirse = listOf(
-        "te has rendido",
-        "no puedo adivinar",
+        "Te has rendido",
+        "No puedo adivinar",
         "el personaje era",
         "te diste por vencido, ¿verdad?",
-        "parece que ya no quieres intentarlo más",
-        "está bien, no siempre se puede acertar",
-        "¿lo dejamos aquí? la respuesta era",
-        "no te preocupes, la solución es",
-        "veo que te rendiste, el personaje era",
-        "está bien, aquí va la respuesta",
-        "se acabaron los intentos, la respuesta correcta es",
-        "no pasa nada, la respuesta era",
-        "darte por vencido está bien a veces, y la solución es",
-        "¿te rendiste? bueno, aquí está la respuesta",
-        "es normal rendirse a veces. la respuesta es",
-        "no te preocupes por rendirte. la solución es",
-        "está bien no saberlo todo, la respuesta era",
-        "parece que esta vez no se pudo. la respuesta es"
+        "Parece que ya no quieres intentarlo más",
+        "Está bien, no siempre se puede acertar",
+        "¿Lo dejamos aquí? la respuesta era",
+        "No te preocupes, la solución es",
+        "Veo que te rendiste, el personaje era",
+        "Está bien, aquí va la respuesta",
+        "Se acabaron los intentos, la respuesta correcta es",
+        "No pasa nada, la respuesta era",
+        "Darte por vencido está bien a veces, y la solución es",
+        "¿Te rendiste? bueno, aquí está la respuesta",
+        "Es normal rendirse a veces. la respuesta es",
+        "No te preocupes por rendirte. la solución es",
+        "Está bien no saberlo todo, la respuesta era",
+        "Parece que esta vez no se pudo. la respuesta es"
     )
 
 
@@ -179,46 +190,92 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         return messageList.size
     }
 
+
+
     //Funcion para verificar si se encuentra la palabra correcto/incorrecto
     fun checkMessageKeywords(holder: MessageViewHolder, message: Message) {
         val result = identificarPatronResponseAI(message.message)
         when (result) {
-            "CORRECTA" -> {
-                contadorRespuestasIncorrectas = 0
+            "CORRECTO" -> {
                 holder.imgGif.apply {
                     setImageResource(gifListCorrect[randomGif])  // Asigna GIF de correcto
                     visibility = View.VISIBLE
                 }
                 holder.icono.visibility = View.GONE  // Opcional: ocultar el ícono si es correcto
+
+                contadorRespuestasIncorrectas = 0
+
+
             }
-            "INCORRECTA" -> {
+            "INCORRECTO" -> {
                 if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
                     contadorRespuestasIncorrectas++
+                   /* holder.tv_message.apply {
+                        text = intentaloNuevamente.get(randomGif)//Asigna mensaje cuando el intento es menos de 3 intentos
+                        visibility = View.VISIBLE
+                    }*/
+                    holder.icono.apply {
+                        setImageResource(iconList.get(randomGif)) //Asignar icono junto al mensaje
+                        visibility = View.VISIBLE
+                    }
+
                 }
                 else {
+
                     holder.imgGif.apply {
                         setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                         visibility = View.VISIBLE
                     }
                     holder.icono.visibility = View.GONE  // Opcional: ocultar el ícono si es incorrecto
                 }
+
             }
             "PARCIALMENTE_CORRECTA" -> {
                 // Acción para respuesta parcialmente correcta
                 if (contadorRespuestasIncorrectas > 0) {
+                    holder.tv_message.apply { //Asignar mensaje de casi correcto
+                        text = patronCasiCorrecto.get(randomGif)
+                        visibility = View.VISIBLE
+                    }
+                    holder.icono.apply {
+                        setImageResource(iconList.get(randomGif)) //Asignar icono junto al mensaje
+                        visibility = View.VISIBLE
+                    }
                     contadorRespuestasIncorrectas--
+                }else{//Accion cuando se pasa de 3 intentos de casi correcto
+                    holder.tv_message.apply { //Asignar mensaje de exceso de respuesta
+                        text = exedisteRespuesta.get(randomGif)
+                        visibility = View.VISIBLE
+                    }
+                    holder.imgGif.apply {
+                        setImageResource(gifListCorrect[randomGif])  // Asigna GIF de incorrecto
+                        visibility = View.VISIBLE
+                    }
+
                 }
-                // Aquí puedes agregar lógica para dar pistas
+
             }
             "USUARIO_RENDIDO" -> {
                 // Acción para cuando el usuario se rinde
                 contadorRespuestasIncorrectas = 0
-                // Aquí puedes agregar lógica para finalizar el juego o actividad
+                holder.tv_message.apply {
+                    text = patronRendirse.get(randomGif)
+                    visibility = View.VISIBLE
+                }
+
+                holder.imgGif.apply {
+                    setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                    visibility = View.VISIBLE
+                }
+                holder.icono.visibility = View.GONE
+
             }
             "SIN_PATRON" -> {
                 // Acción para respuesta sin patrón
+                println("Respuesta no válida. Por favor, proporciona una respuesta válida.")
 
-                // Aquí puedes agregar lógica para solicitar una nueva entrada
+
+
             }
             else -> {
                 // Acción para respuestas no reconocidas
@@ -245,11 +302,10 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val currentMessage = messageList[position]
-        Log.d("Pista: ",currentMessage.message)
 
-        //val  palabra = "incorrecto"
 
         when (currentMessage.id) {
+
             SEND_ID -> { // Mensaje enviado
                 holder.tv_message.apply {
                     text = currentMessage.message
@@ -269,6 +325,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                 holder.tv_message.visibility = View.GONE
                 //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
+
                     holder.tv_bot_message.apply {
                         text = mensajePrincipal.get(randomGif)
                         visibility = View.VISIBLE
@@ -278,15 +335,21 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                         visibility = View.VISIBLE
                     }
                     holder.icono.visibility = View.GONE
+                    // Selecciona GIF o ícono según el contenido del mensaje
+                    checkMessageKeywords(holder, currentMessage)
+
 
                 } else {
+                    holder.tv_bot_message.apply {
+                        mutableListOf(messageList)
+                        visibility = View.VISIBLE
+                    }
                     holder.imgGif.visibility = View.GONE
                     holder.icono.visibility = View.VISIBLE
                     holder.icono.apply {
                         setImageResource(iconList.get(randomGif))
                     }
-                    // Selecciona GIF o ícono según el contenido del mensaje
-                    checkMessageKeywords(holder, currentMessage)
+
 
 
                 }
