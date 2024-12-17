@@ -1,88 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
     tools:context=".ul.MainActivity">
 
-
-
-    <LinearLayout
-        android:id="@+id/ll_layout_bar"
+    <!-- Fondo clickeable -->
+    <View
+        android:id="@+id/background_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#E4E4E4"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
 
-        <EditText
-            android:id="@+id/et_message"
-            android:layout_width="254dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight=".5"
-            android:background="@drawable/round_button"
-            android:backgroundTint="@android:color/white"
-            android:hint="Escribe tu mensaje..."
-            android:inputType="textShortMessage"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@android:color/black" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_send"
-            android:layout_width="138dp"
+        <!-- RecyclerView para los mensajes -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_messages"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/round_button"
-            android:backgroundTint="#FF5722"
-            android:text="Enviar"
-            android:textColor="@android:color/white" />
+            android:layout_above="@id/ll_layout_bar"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/catedral_prueba"
+            tools:itemCount="20"
+            tools:listitem="@layout/message_item" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
+        <!-- Contenedor para los TextViews dinámicos -->
+        <LinearLayout
+            android:id="@+id/text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="8dp"
+            android:gravity="center"
+            android:background="@android:color/white" />
+
+        <!-- Barra inferior -->
+        <LinearLayout
+            android:id="@+id/ll_layout_bar"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_alignParentBottom="true"
+            android:background="#190e00"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/et_message"
+                android:inputType="textShortMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/round_button"
+                android:backgroundTint="@android:color/white"
+                android:hint="Escribe un mensaje..."
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@android:color/black" />
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_button"
+                android:backgroundTint="#89892e"
+                android:text="Enviar"
+                android:textColor="@android:color/white"
+                android:padding="12dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <!-- Botón flotante -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-
-
-    </LinearLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_messages"
-        android:layout_width="match_parent"
-        android:layout_height="653dp"
-        android:layout_above="@id/ll_layout_bar"
-        android:layout_below="@+id/dark_divider"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="3dp"
-        android:background="@drawable/catedral_prueba"
-        tools:itemCount="20"
-        tools:listitem="@layout/message_item" />
-
-    <View
-        android:id="@+id/dark_divider"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#00A5E3" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="¿QUIEN HIZO QUE?"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="35dp"
-        android:textStyle="bold|italic" />
-
-
-</RelativeLayout>
+            android:layout_above="@id/ll_layout_bar"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:layout_marginBottom="100dp"
+            android:src="@drawable/colt_gun"
+            app:backgroundTint="#908c50"
+            app:maxImageSize="56dp" />
+    </RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#D3D3D3"
+    android:id="@+id/main">
+
+
+
+    <!-- LinearLayout para imageView7 -->
+    <!-- <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:gravity="center">
+
+     <ImageView
+         android:id="@+id/imageView7"
+         android:layout_width="414dp"
+         android:layout_height="157dp"
+         app:srcCompat="@drawable/dsdsdsdsdsds" />
+ </LinearLayout>-->
+
+ <!-- LinearLayout para imageView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight=".2">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="419dp"
+            android:layout_height="449dp"
+            android:layout_weight=".9"
+            app:srcCompat="@drawable/bufa_800" />
+
+    </LinearLayout>
+
+    <!-- LinearLayout para gifImageView y gifImageView2 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight=".2">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifImageView"
+            android:layout_width="160dp"
+            android:layout_height="195dp"
+            android:src="@drawable/militar_saludando_unscreen" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifImageView2"
+            android:layout_width="160dp"
+            android:layout_height="195dp"
+            android:src="@drawable/hombre_saludo_unscreen" />
+    </LinearLayout>
+
+    <!-- LinearLayout para Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight=".1">
+
+
+        <Button
+            android:id="@+id/btnInicio"
+            android:layout_width="97dp"
+            android:layout_height="58dp"
+            android:text="INICIAR" />
+    </LinearLayout>
+
+    <!-- LinearLayout para gifImageView3 y gifImageView4 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight=".2">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifImageView3"
+            android:layout_width="160dp"
+            android:layout_height="195dp"
+            android:src="@drawable/adelita_saludando_unscreen" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifImageView4"
+            android:layout_width="160dp"
+            android:layout_height="195dp"
+            android:src="@drawable/mujer_saludo_unscreen" />
+    </LinearLayout>
+
+</LinearLayout>

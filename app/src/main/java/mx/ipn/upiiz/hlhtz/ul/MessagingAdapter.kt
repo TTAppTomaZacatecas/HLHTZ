@@ -1,5 +1,4 @@
 package mx.ipn.upiiz.hlhtz.ul
-
 import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.motion.widget.Debug
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import mx.ipn.upiiz.hlhtz.R
 import mx.ipn.upiiz.hlhtz.date.Message
-import mx.ipn.upiiz.hlhtz.utils.Constants.RECEIVE_ID
-import mx.ipn.upiiz.hlhtz.utils.Constants.SEND_ID
+import mx.ipn.upiiz.hlhtz.utils.Constants.RESPONSE_AI_TYPE_MESSAGE
+import mx.ipn.upiiz.hlhtz.utils.Constants.MESSAGE_USER_TYPE
+import kotlin.math.log
 import kotlin.random.Random
 class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
+
 
     var messageList = mutableListOf<Message>()
     // varibale de random para gif e iconos
@@ -23,6 +23,23 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     var contadorRespuestasIncorrectas = 0
     var numMaxRespuestasIncorrectasPermitidas = 3
     var gamingInstance = -1
+    var resultResponseAI = ""
+    var contador = 0
+
+
+    //insertar mensaje
+    fun insertMessage(
+        message: Message,
+        gamingInstance: Int
+    ) {
+        this.messageList.add(message)
+        this.gamingInstance = gamingInstance
+        this.contadorRespuestasIncorrectas = contadorRespuestasIncorrectas
+        this.resultResponseAI = resultResponseAI
+        contador++
+        //Log.d("PatronMatching1", "Valor del contador del ADAPTER: $contador")
+        notifyItemInserted(messageList.size)
+    }
 
 
     // Lista de recursos de GIFs
@@ -67,7 +84,14 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
 
     val patronCorrecto = listOf(
         "¡Correcto!, has adivinado",
+        "¡correcto!",
+        "Adivinaste",
+        "si",
         "¡Exacto!, Respuesta correcta",
+        "¡Si!",
+        "¡Has adivinado!",
+        "¡Felicidades!",
+        "¡Felicidades por adivinar!",
         "¡Eso es!",
         "¡Perfecto!",
         "¡Así es!",
@@ -89,15 +113,19 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     )
 
     val patronIncorrecto = listOf(
+        "no",
+        "error",
+        "no es",
+        "ups",
+        "salido",
         "Incorrecto",
         "Incorrecta",
         "No es, intenta de nuevo",
         "No es correcto",
         "No, esa no es la respuesta",
-        "Lo siento, pero no es correcto",
         "Esa no es la opción correcta",
         "No es la respuesta que buscábamos",
-        "Sigue intentando, esa no es",
+        "Sigue intentando",
         "Por ahí no va",
         "No acertaste esta vez",
         "Eso no es, prueba otra vez",
@@ -106,9 +134,9 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "No es lo que esperaba",
         "Esa no es la solución correcta",
         "Cerca, pero no es esa",
-        "No, sigue pensando",
+        "sigue pensando",
         "Todavía no, dale otra vuelta",
-        "No, no va por ahí",
+        "no va por ahí",
         "Lamentablemente, no es correcto",
         "Esa no es la respuesta adecuada",
         "No, prueba de nuevo",
@@ -156,6 +184,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "Te has rendido",
         "No puedo adivinar",
         "el personaje era",
+        "¡gracias por participar!",
         "te diste por vencido, ¿verdad?",
         "Parece que ya no quieres intentarlo más",
         "Está bien, no siempre se puede acertar",
@@ -170,7 +199,9 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "Es normal rendirse a veces. la respuesta es",
         "No te preocupes por rendirte. la solución es",
         "Está bien no saberlo todo, la respuesta era",
-        "Parece que esta vez no se pudo. la respuesta es"
+        "Parece que esta vez no se pudo. la respuesta es",
+        "Gracias por participar",
+        "lo entiendo"
     )
 
 
@@ -190,49 +221,80 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         return messageList.size
     }
 
-
-
     //Funcion para verificar si se encuentra la palabra correcto/incorrecto
     fun checkMessageKeywords(holder: MessageViewHolder, message: Message) {
         val result = identificarPatronResponseAI(message.message)
+        Log.d("PatronMatching1", "Resultado de analisis de respuesta: $result")
+
         when (result) {
             "CORRECTO" -> {
+                Log.d("PatronMatching1", "DEFINITIVAMENTE FUE CORRECTA")
+                //Agregra gif de correcto
                 holder.imgGif.apply {
                     setImageResource(gifListCorrect[randomGif])  // Asigna GIF de correcto
                     visibility = View.VISIBLE
                 }
-                holder.icono.visibility = View.GONE  // Opcional: ocultar el ícono si es correcto
+                // Opcional: ocultar el ícono si es correcto
+                holder.icono.visibility = View.GONE
+
 
                 contadorRespuestasIncorrectas = 0
-
-
             }
             "INCORRECTO" -> {
+                Log.d("PatronMatching2", "DEFINITIVAMENTE FUE INCORRECTA")
                 if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
+                    // Log.d("PatronMatching1", "AQUI DEBERIA CONTAR")
                     contadorRespuestasIncorrectas++
-                   /* holder.tv_message.apply {
-                        text = intentaloNuevamente.get(randomGif)//Asigna mensaje cuando el intento es menos de 3 intentos
-                        visibility = View.VISIBLE
-                    }*/
-                    holder.icono.apply {
-                        setImageResource(iconList.get(randomGif)) //Asignar icono junto al mensaje
-                        visibility = View.VISIBLE
-                    }
-
-                }
-                else {
-
+                    holder.imgGif.visibility = View.GONE
+                    /*Log.d(
+                        "PatronMatching2",
+                        "Nuevo valor del contador: $contadorRespuestasIncorrectas"
+                    )*/
+                } else if(contadorRespuestasIncorrectas == numMaxRespuestasIncorrectasPermitidas) {
+                    Log.d("PatronMatching3", "AQUI YA VALIO MAUSER XD")
                     holder.imgGif.apply {
                         setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                         visibility = View.VISIBLE
                     }
-                    holder.icono.visibility = View.GONE  // Opcional: ocultar el ícono si es incorrecto
+                    holder.icono.visibility =
+                        View.GONE  // Opcional: ocultar el ícono si es incorrecto
+                    contadorRespuestasIncorrectas = 0
+                    /*Log.d(
+                        "PatronMatching4",
+                        "Nuevo valor del contador: $contadorRespuestasIncorrectas"
+                    )*/
                 }
-
+                /* holder.tv_message.apply {
+                        text = intentaloNuevamente.get(randomGif)//Asigna mensaje cuando el intento es menos de 3 intentos
+                        visibility = View.VISIBLE
+                    }*/
             }
-            "PARCIALMENTE_CORRECTA" -> {
+            "PARCIALMENTE_CORRECTO" -> {
                 // Acción para respuesta parcialmente correcta
+                Log.d("PatronMaching4","aqui por poco y adivinabas")
                 if (contadorRespuestasIncorrectas > 0) {
+                    holder.tv_message.apply { //Asignar mensaje de exceso de respuesta
+                        text = exedisteRespuesta.get(randomGif)
+                        visibility = View.VISIBLE
+                    }
+                    holder.imgGif.apply {
+                        setImageResource(gifListCorrect[randomGif])  // Asigna GIF de incorrecto
+                        visibility = View.GONE
+                    }
+
+                    contadorRespuestasIncorrectas++
+                }else if(contadorRespuestasIncorrectas == numMaxRespuestasIncorrectasPermitidas){//Accion cuando se pasa de 3 intentos
+                    holder.imgGif.apply {
+                        setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                        visibility = View.VISIBLE
+                    }
+                    holder.icono.visibility =
+                        View.GONE  // Opcional: ocultar el ícono si es incorrecto
+                    contadorRespuestasIncorrectas = 0// de casi correcto
+
+
+                }
+                else{
                     holder.tv_message.apply { //Asignar mensaje de casi correcto
                         text = patronCasiCorrecto.get(randomGif)
                         visibility = View.VISIBLE
@@ -241,28 +303,16 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                         setImageResource(iconList.get(randomGif)) //Asignar icono junto al mensaje
                         visibility = View.VISIBLE
                     }
-                    contadorRespuestasIncorrectas--
-                }else{//Accion cuando se pasa de 3 intentos de casi correcto
-                    holder.tv_message.apply { //Asignar mensaje de exceso de respuesta
-                        text = exedisteRespuesta.get(randomGif)
-                        visibility = View.VISIBLE
-                    }
-                    holder.imgGif.apply {
-                        setImageResource(gifListCorrect[randomGif])  // Asigna GIF de incorrecto
-                        visibility = View.VISIBLE
-                    }
-
+                    contadorRespuestasIncorrectas --
                 }
-
             }
             "USUARIO_RENDIDO" -> {
                 // Acción para cuando el usuario se rinde
-                contadorRespuestasIncorrectas = 0
+                Log.d("PatronMaching5", "el usuario se rindio")
                 holder.tv_message.apply {
                     text = patronRendirse.get(randomGif)
                     visibility = View.VISIBLE
                 }
-
                 holder.imgGif.apply {
                     setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                     visibility = View.VISIBLE
@@ -273,28 +323,36 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
             "SIN_PATRON" -> {
                 // Acción para respuesta sin patrón
                 println("Respuesta no válida. Por favor, proporciona una respuesta válida.")
-
-
+                holder.imgGif.visibility = View.GONE
 
             }
             else -> {
                 // Acción para respuestas no reconocidas
                 println("Respuesta no válida. Por favor, proporciona una respuesta válida.")
+                holder.imgGif.apply {
+                    setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                    visibility = View.GONE
+                }
+
             }
+
         }
+        Log.d("PatronMatching6", "Contador de respuestas incorrectas: $contadorRespuestasIncorrectas")
     }
+
 
     fun identificarPatronResponseAI(responseAI: String?): String {
         // Validamos si la respuesta es nula o vacía
         if (responseAI.isNullOrBlank()) return "SIN_PATRON"
         // Convertimos la respuesta a minúsculas para comparación
         val respuestaLower = responseAI.lowercase()
+        Log.d("PatronMatching6", "Comparando: $respuestaLower")
         // Verificamos cada patrón
         return when {
-            patronCorrecto.any { it.lowercase() in respuestaLower } -> "CORRECTA"
-            patronIncorrecto.any { it.lowercase() in respuestaLower } -> "INCORRECTA"
-            patronCasiCorrecto.any { it.lowercase() in respuestaLower } -> "PARCIALMENTE_CORRECTA"
+            patronIncorrecto.any { it.lowercase() in respuestaLower } -> "INCORRECTO"
+            patronCasiCorrecto.any { it.lowercase() in respuestaLower } -> "PARCIALMENTE_CORRECTO"
             patronRendirse.any { it.lowercase() in respuestaLower } -> "USUARIO_RENDIDO"
+            patronCorrecto.any { it.lowercase() in respuestaLower } -> "CORRECTO"
             else -> "SIN_PATRON"
         }
     }
@@ -302,11 +360,8 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val currentMessage = messageList[position]
-
-
-        when (currentMessage.id) {
-
-            SEND_ID -> { // Mensaje enviado
+        when (currentMessage.idTypeMessage) {
+            MESSAGE_USER_TYPE -> { // Mensaje enviado
                 holder.tv_message.apply {
                     text = currentMessage.message
                     visibility = View.VISIBLE
@@ -315,17 +370,21 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                 holder.imgGif.layoutParams.width = 400
                 holder.imgGif.layoutParams.height= 0
                 holder.icono.visibility = View.GONE
-               // holder.imgGif.visibility = View.GONE // Ocultar el GIF en mensajes enviados
+                // holder.imgGif.visibility = View.GONE // Ocultar el GIF en mensajes enviados
             }
-            RECEIVE_ID -> { // Mensaje recibido  //tipo de respuesya
+            RESPONSE_AI_TYPE_MESSAGE -> { // Mensaje recibido  //tipo de respuesya
+                //executeActionByResponseAI(holder)
+                if (currentMessage.isResultAItoResponseUser) {
+                    checkMessageKeywords(holder, currentMessage)
+                }
                 holder.tv_bot_message.apply {
                     text = currentMessage.message
                     visibility = View.VISIBLE
                 }
+                holder.imgGif.visibility = View.GONE
                 holder.tv_message.visibility = View.GONE
                 //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
-
                     holder.tv_bot_message.apply {
                         text = mensajePrincipal.get(randomGif)
                         visibility = View.VISIBLE
@@ -335,35 +394,21 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                         visibility = View.VISIBLE
                     }
                     holder.icono.visibility = View.GONE
+                    holder.tv_message.visibility = View.GONE
+
                     // Selecciona GIF o ícono según el contenido del mensaje
-                    checkMessageKeywords(holder, currentMessage)
-
-
                 } else {
-                    holder.tv_bot_message.apply {
-                        mutableListOf(messageList)
+                    holder.imgGif.visibility = View.GONE
+                    holder.icono.apply {
+                        setImageResource(gifList.get(randomGif))
                         visibility = View.VISIBLE
                     }
-                    holder.imgGif.visibility = View.GONE
-                    holder.icono.visibility = View.VISIBLE
-                    holder.icono.apply {
-                        setImageResource(iconList.get(randomGif))
-                    }
-
-
-
                 }
-
 
             }
         }
     }
-//insertar mensaje
-    fun insertMessage(message: Message, gamingInstance: Int) {
-        this.messageList.add(message)
-        this.gamingInstance = gamingInstance
-        notifyItemInserted(messageList.size)
-    }
+
 }
 
 // Añadir ItemTouchHelper para manejar los swipes y prevenir eliminación
