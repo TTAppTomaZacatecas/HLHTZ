@@ -70,9 +70,13 @@
 
         <Button
             android:id="@+id/btnInicio"
-            android:layout_width="97dp"
-            android:layout_height="58dp"
-            android:text="INICIAR" />
+            android:layout_width="105dp"
+            android:layout_height="60dp"
+            android:text="INICIAR"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"/>
     </LinearLayout>
 
     <!-- LinearLayout para gifImageView3 y gifImageView4 -->

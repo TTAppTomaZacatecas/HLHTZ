@@ -183,6 +183,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     val patronRendirse = listOf(
         "Te has rendido",
         "No puedo adivinar",
+        "Gracias por jugar",
         "el personaje era",
         "¡gracias por participar!",
         "te diste por vencido, ¿verdad?",
@@ -250,7 +251,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                         "PatronMatching2",
                         "Nuevo valor del contador: $contadorRespuestasIncorrectas"
                     )*/
-                } else if(contadorRespuestasIncorrectas == numMaxRespuestasIncorrectasPermitidas) {
+                } else {
                     Log.d("PatronMatching3", "AQUI YA VALIO MAUSER XD")
                     holder.imgGif.apply {
                         setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
@@ -376,6 +377,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                 //executeActionByResponseAI(holder)
                 if (currentMessage.isResultAItoResponseUser) {
                     checkMessageKeywords(holder, currentMessage)
+                    Log.d("Debug", "isResultAItoResponseUser: ${currentMessage.isResultAItoResponseUser}")
                 }
                 holder.tv_bot_message.apply {
                     text = currentMessage.message

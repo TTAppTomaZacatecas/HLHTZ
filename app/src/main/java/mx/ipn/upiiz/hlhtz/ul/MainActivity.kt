@@ -162,16 +162,17 @@ class MainActivity : AppCompatActivity () {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fab = findViewById(R.id.fab)
         setContentView(R.layout.activity_main)
+        fab = findViewById(R.id.fab)
         rv_messages = findViewById(R.id.rv_messages)
         btn_send = findViewById(R.id.btn_send)
         et_message = findViewById(R.id.et_message)
         progressBar = findViewById(R.id.progressBar)
+
         // job = Job()
 
 
-        setUpRecyclerview()
+        recyclerview()
 
 
 
@@ -201,7 +202,7 @@ class MainActivity : AppCompatActivity () {
         }
     }
 
-    private fun setUpRecyclerview() {
+    private fun recyclerview() {
         adapter = MessagingAdapter()
         rv_messages.adapter = adapter
         rv_messages.layoutManager = LinearLayoutManager(applicationContext)
@@ -334,7 +335,7 @@ class MainActivity : AppCompatActivity () {
     }
 
 
-    fun setContadorRespuestasIncorrectas(aiMessage: String) {
+    /*fun setContadorRespuestasIncorrectas(aiMessage: String) {
         resultResponseAI = identificarPatronResponseAI(aiMessage)
         //Log.d("PatronMatching1", "Resultado de analisis de respuesta: $resultResponseAI")
         when (resultResponseAI) {
@@ -381,7 +382,7 @@ class MainActivity : AppCompatActivity () {
             patronRendirse.any { it.lowercase() in respuestaLower } -> "USUARIO_RENDIDO"
             else -> "SIN_PATRON"
         }
-    }
+    }*/
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(this, view)
         popupMenu.inflate(R.menu.menu_emergente)
