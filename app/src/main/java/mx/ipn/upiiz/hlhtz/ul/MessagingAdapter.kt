@@ -20,11 +20,12 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     var messageList = mutableListOf<Message>()
     // varibale de random para gif e iconos
     var randomGif = Random.nextInt(4)
-    var contadorRespuestasIncorrectas = 0
+    var contadorRespuestasIncorrectas = 1
     var numMaxRespuestasIncorrectasPermitidas = 3
     var gamingInstance = -1
     var resultResponseAI = ""
     var contador = 0
+    var variableRespuestaCorrecta = 0
 
 
     //insertar mensaje
@@ -111,6 +112,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "¡En efecto, esa es la respuesta!",
         "¡Gran trabajo, diste en el punto exacto!"
     )
+
 
     val patronIncorrecto = listOf(
         "no",
@@ -225,32 +227,35 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     //Funcion para verificar si se encuentra la palabra correcto/incorrecto
     fun checkMessageKeywords(holder: MessageViewHolder, message: Message) {
         val result = identificarPatronResponseAI(message.message)
-        Log.d("PatronMatching1", "Resultado de analisis de respuesta: $result")
+        Log.d("PatronMatching1", "Resultado de analisis de respuesta: $result" + " "+message.message)
 
         when (result) {
             "CORRECTO" -> {
                 Log.d("PatronMatching1", "DEFINITIVAMENTE FUE CORRECTA")
-                //Agregra gif de correcto
+                variableRespuestaCorrecta = 1
+                /*Agregra gif de correcto
                 holder.imgGif.apply {
                     setImageResource(gifListCorrect[randomGif])  // Asigna GIF de correcto
                     visibility = View.VISIBLE
                 }
+                Log.d("PatronMatching1", "Random gif "+randomGif)
                 // Opcional: ocultar el ícono si es correcto
                 holder.icono.visibility = View.GONE
 
 
-                contadorRespuestasIncorrectas = 0
+                contadorRespuestasIncorrectas = 0*/
             }
             "INCORRECTO" -> {
                 Log.d("PatronMatching2", "DEFINITIVAMENTE FUE INCORRECTA")
-                if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
-                    // Log.d("PatronMatching1", "AQUI DEBERIA CONTAR")
+                variableRespuestaCorrecta = 2
+                /*if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
+                    Log.d("PatronMatching1", "AQUI DEBERIA CONTAR")
                     contadorRespuestasIncorrectas++
                     holder.imgGif.visibility = View.GONE
-                    /*Log.d(
+                    Log.d(
                         "PatronMatching2",
                         "Nuevo valor del contador: $contadorRespuestasIncorrectas"
-                    )*/
+                    )
                 } else {
                     Log.d("PatronMatching3", "AQUI YA VALIO MAUSER XD")
                     holder.imgGif.apply {
@@ -260,20 +265,21 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                     holder.icono.visibility =
                         View.GONE  // Opcional: ocultar el ícono si es incorrecto
                     contadorRespuestasIncorrectas = 0
-                    /*Log.d(
+                    Log.d(
                         "PatronMatching4",
                         "Nuevo valor del contador: $contadorRespuestasIncorrectas"
-                    )*/
+                    )
                 }
                 /* holder.tv_message.apply {
                         text = intentaloNuevamente.get(randomGif)//Asigna mensaje cuando el intento es menos de 3 intentos
                         visibility = View.VISIBLE
-                    }*/
+                    }*/*/
             }
             "PARCIALMENTE_CORRECTO" -> {
+                variableRespuestaCorrecta = 3
                 // Acción para respuesta parcialmente correcta
                 Log.d("PatronMaching4","aqui por poco y adivinabas")
-                if (contadorRespuestasIncorrectas > 0) {
+               /* if (contadorRespuestasIncorrectas > 0) {
                     holder.tv_message.apply { //Asignar mensaje de exceso de respuesta
                         text = exedisteRespuesta.get(randomGif)
                         visibility = View.VISIBLE
@@ -305,12 +311,13 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                         visibility = View.VISIBLE
                     }
                     contadorRespuestasIncorrectas --
-                }
+                }*/
             }
             "USUARIO_RENDIDO" -> {
+                variableRespuestaCorrecta = 4
                 // Acción para cuando el usuario se rinde
                 Log.d("PatronMaching5", "el usuario se rindio")
-                holder.tv_message.apply {
+               /* holder.tv_message.apply {
                     text = patronRendirse.get(randomGif)
                     visibility = View.VISIBLE
                 }
@@ -318,7 +325,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                     setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                     visibility = View.VISIBLE
                 }
-                holder.icono.visibility = View.GONE
+                holder.icono.visibility = View.GONE*/
 
             }
             "SIN_PATRON" -> {
@@ -400,11 +407,91 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
 
                     // Selecciona GIF o ícono según el contenido del mensaje
                 } else {
-                    holder.imgGif.visibility = View.GONE
-                    holder.icono.apply {
-                        setImageResource(gifList.get(randomGif))
-                        visibility = View.VISIBLE
+                    when (variableRespuestaCorrecta){
+                        1 -> {
+                            holder.imgGif.apply {
+                                setImageResource(gifListCorrect.get(randomGif))
+                                visibility = View.VISIBLE
+                            }
+                            holder.icono.apply {
+                                setImageResource(gifList.get(randomGif))
+                                visibility = View.GONE
+                            }
+                        }
+                        2 -> {
+                            if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
+                                Log.d("PatronMatching1", "AQUI DEBERIA CONTAR")
+                                contadorRespuestasIncorrectas++
+                                holder.imgGif.visibility = View.GONE
+                                Log.d(
+                                    "PatronMatching2",
+                                    "Nuevo valor del contador: $contadorRespuestasIncorrectas"
+                                )
+                            } else {
+                                Log.d("PatronMatching3", "AQUI YA VALIO MAUSER XD")
+                                holder.imgGif.apply {
+                                    setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                                    visibility = View.VISIBLE
+                                }
+                                holder.icono.visibility =
+                                    View.GONE  // Opcional: ocultar el ícono si es incorrecto
+                                contadorRespuestasIncorrectas = 0
+                                Log.d(
+                                    "PatronMatching4",
+                                    "Nuevo valor del contador: $contadorRespuestasIncorrectas"
+                                )
+                            }
+                        }
+                        3 -> {
+                            if (contadorRespuestasIncorrectas > 0) {
+                                holder.tv_message.apply { //Asignar mensaje de exceso de respuesta
+                                    text = exedisteRespuesta.get(randomGif)
+                                    visibility = View.VISIBLE
+                                }
+                                holder.imgGif.apply {
+                                    setImageResource(gifListCorrect[randomGif])  // Asigna GIF de incorrecto
+                                    visibility = View.GONE
+                                }
+
+                                contadorRespuestasIncorrectas++
+                            }else if(contadorRespuestasIncorrectas == numMaxRespuestasIncorrectasPermitidas){//Accion cuando se pasa de 3 intentos
+                                holder.imgGif.apply {
+                                    setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                                    visibility = View.VISIBLE
+                                }
+                                holder.icono.visibility =
+                                    View.GONE  // Opcional: ocultar el ícono si es incorrecto
+                                contadorRespuestasIncorrectas = 0// de casi correcto
+
+
+                            }
+                            else{
+                                holder.tv_message.apply { //Asignar mensaje de casi correcto
+                                    text = patronCasiCorrecto.get(randomGif)
+                                    visibility = View.VISIBLE
+                                }
+                                holder.icono.apply {
+                                    setImageResource(iconList.get(randomGif)) //Asignar icono junto al mensaje
+                                    visibility = View.VISIBLE
+                                }
+                                contadorRespuestasIncorrectas --
+                            }
+                        }
+                        4 -> {
+                            holder.tv_message.apply {
+                                text = patronRendirse.get(randomGif)
+                                visibility = View.VISIBLE
+                            }
+                            holder.imgGif.apply {
+                                setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
+                                visibility = View.VISIBLE
+                            }
+                            holder.icono.visibility = View.GONE
+                        }
                     }
+
+
+
                 }
 
             }
