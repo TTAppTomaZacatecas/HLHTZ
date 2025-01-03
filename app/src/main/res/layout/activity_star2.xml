@@ -8,20 +8,6 @@
     android:id="@+id/main">
 
 
-
-    <!-- LinearLayout para imageView7 -->
-    <!-- <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:gravity="center">
-
-     <ImageView
-         android:id="@+id/imageView7"
-         android:layout_width="414dp"
-         android:layout_height="157dp"
-         app:srcCompat="@drawable/dsdsdsdsdsds" />
- </LinearLayout>-->
-
  <!-- LinearLayout para imageView -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,13 +15,13 @@
         android:gravity="center"
         android:layout_weight=".2">
 
-
+        <!--Imagen de vista principal "Bufa"-->
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="419dp"
+            android:layout_width="430dp"
             android:layout_height="449dp"
-            android:layout_weight=".9"
-            app:srcCompat="@drawable/bufa_800" />
+            android:layout_weight="1"
+            app:srcCompat="@drawable/bufaaaa1" />
 
     </LinearLayout>
 
@@ -46,12 +32,12 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_weight=".2">
-
+        <!--Imagen de adelita y gerrillero-->
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gifImageView"
             android:layout_width="160dp"
             android:layout_height="195dp"
-            android:src="@drawable/militar_saludando_unscreen" />
+            android:src="@drawable/adelita_saludando_unscreen" />
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gifImageView2"
@@ -67,7 +53,7 @@
         android:gravity="center"
         android:layout_weight=".1">
 
-
+        <!--Botón de  inicio-->
         <Button
             android:id="@+id/btnInicio"
             android:layout_width="105dp"
@@ -87,11 +73,12 @@
         android:gravity="center"
         android:layout_weight=".2">
 
+        <!--Imagen de militar y mujer de la epoca-->
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gifImageView3"
             android:layout_width="160dp"
             android:layout_height="195dp"
-            android:src="@drawable/adelita_saludando_unscreen" />
+            android:src="@drawable/militar_saludando_unscreen" />
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gifImageView4"

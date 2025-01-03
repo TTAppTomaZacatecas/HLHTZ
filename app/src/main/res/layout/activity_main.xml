@@ -52,7 +52,7 @@
             android:background="#190e00"
             android:orientation="horizontal"
             android:padding="8dp">
-
+            <!--Espacio del mensaje-->
             <EditText
                 android:id="@+id/et_message"
                 android:inputType="textShortMessage"
@@ -65,7 +65,7 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textColor="@android:color/black" />
-
+            <!--Boton de enviar-->
             <Button
                 android:id="@+id/btn_send"
                 android:layout_width="wrap_content"
