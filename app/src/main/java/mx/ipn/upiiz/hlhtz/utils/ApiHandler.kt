@@ -5,6 +5,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mx.ipn.upiiz.hlhtz.ul.ApiService
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.await
@@ -24,8 +25,8 @@ object ApiHandler {
     private val responseGamingInstance = Channel<Int>()
     private val responseNewGame = Channel<List<String>>()
 
-    private val apiService = retrofit.create(ApiService::class.java)
 
+    private val apiService = retrofit.create(ApiService::class.java)
 
 
     suspend fun sendMessageToGPT(message: String): String {
@@ -43,6 +44,7 @@ object ApiHandler {
         // Wait for the response to be received on the channel
         return responseSaludo.receive()
     }
+
 
     suspend fun saludoDelBot(): String {
         // Start a new coroutine to make the network call

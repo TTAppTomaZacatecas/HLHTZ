@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity () {
             showPopupMenu(it)
         }
 
+
     }
 
     private fun clickEvents() {
@@ -186,6 +187,7 @@ class MainActivity : AppCompatActivity () {
         }
     }
 
+
     private fun adaptarBotResponse(response: String, isResultAItoResponseUser: Boolean) {
         val timeStamp = Time.timeStamp()
         val message = Message(response, RESPONSE_AI_TYPE_MESSAGE, isResultAItoResponseUser, timeStamp)
@@ -220,6 +222,10 @@ class MainActivity : AppCompatActivity () {
                     createSmallTextView()
                     true
                 }
+                R.id.menu_item_option3 -> {
+                    solicitarNuevoJuego()
+                    true
+                }
 
                 else -> false
             }
@@ -232,6 +238,26 @@ class MainActivity : AppCompatActivity () {
         startActivity(intent)
         finish()
     }
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun solicitarNuevoJuego() {
+        GlobalScope.launch {
+            try {
+                val pistas = withContext(Dispatchers.IO) {
+                    ApiHandler.initNewPlay(gamingInstance)
+                }
+                withContext(Dispatchers.Main) {
+                    progressBar.visibility = View.VISIBLE
+                    for (pista in pistas) {
+                        adaptarBotResponse(pista, false)
+                    }
+                    progressBar.visibility = View.GONE
+                }
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error al iniciar nuevo juego: ${e.message}")
+            }
+        }
+    }
+
 
 
 

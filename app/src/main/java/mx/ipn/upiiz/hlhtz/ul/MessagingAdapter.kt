@@ -22,7 +22,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
     var messageList = mutableListOf<Message>()
     // varibale de random para gif e iconos
     var randomGif = Random.nextInt(4)
-    var contadorRespuestasIncorrectas = 1
+    var contadorRespuestasIncorrectas = 0
     var numMaxRespuestasIncorrectasPermitidas = 3
     var gamingInstance = -1
     var resultResponseAI = ""
@@ -98,7 +98,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "¡Correcto!, has adivinado",
         "¡correcto!",
         "Adivinaste",
-        "si",
+        "si"/*,
         "¡Exacto!, Respuesta correcta",
         "¡Si!",
         "¡Has adivinado!",
@@ -121,7 +121,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "¡Sí, eso es lo que quería escuchar!",
         "¡Tienes toda la razón!",
         "¡En efecto, esa es la respuesta!",
-        "¡Gran trabajo, diste en el punto exacto!"
+        "¡Gran trabajo, diste en el punto exacto!"*/
     )
 
 
@@ -129,8 +129,8 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "no",
         "error",
         "Incorrecto",
+        "ups"/*,
         "Incorrecta",
-        "ups",
         "salido",
         "No es, intenta de nuevo",
         "No es correcto",
@@ -152,14 +152,14 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "Lamentablemente, no es correcto",
         "Esa no es la respuesta adecuada",
         "No, prueba de nuevo",
-        "Negativo, esa no es"
+        "Negativo, esa no es"*/
     )
     val intentaloNuevamente = listOf(
         "¡Estás cerca! Cada intento te hace mejorar. No te rindas, ¡tú puedes lograrlo!",
         "¡Gran avance! Ya estás más cerca de la solución. Inténtalo de nuevo, ¡esta vez puede ser la vencida!",
         "Tu dedicación es impresionante. ¡Sigue intentándolo, cada paso te lleva más cerca de la meta!",
         "Sé que este desafío no es fácil, pero tienes todo lo necesario para superarlo. ¡No te detengas ahora!",
-        "¡Cada intento es una lección! Lo estás haciendo genial, y pronto verás los resultados."
+       // "¡Cada intento es una lección! Lo estás haciendo genial, y pronto verás los resultados."
 
     )
     val exedisteRespuesta = listOf(
@@ -167,14 +167,14 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "Suerte para la proxima",
         "¡No te rindas! La práctica te llevará a la victoria.",
         "¡Ups! Parece que has usado todas tus oportunidades por ahora.",
-        "¡Se acabaron tus intentos!"
+        //"¡Se acabaron tus intentos!"
     )
 
     val patronCasiCorrecto = listOf(
         "Vas por el camino correcto",
         "Estás en el camino correcto",
         "¿Tienes más pistas o te atreves a dar una respuesta más específica?",
-        "Cerca",
+        "Cerca"/*,
         "Estás muy cerca, sigue pensando",
         "Eso tiene sentido, pero falta un poco más",
         "Vas bien, ¿quieres ajustar un poco más la idea?",
@@ -189,7 +189,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "Eso tiene mucho sentido, pero no es la respuesta completa",
         "Un poco más y lo consigues",
         "Tienes la idea, pero no del todo. ¿quieres intentarlo de nuevo?",
-        "Interesante enfoque, pero no es exactamente lo que buscábamos. ¡casi!"
+        "Interesante enfoque, pero no es exactamente lo que buscábamos. ¡casi!"*/
     )
 
     val patronRendirse = listOf(
@@ -197,7 +197,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "¡Gracias por intentarlo!",
         "Te has rendido",
         "¡No te rindas!",
-        "No puedo adivinar",
+        /*"No puedo adivinar",
         "¡Gracias por jugar!",
         "el personaje era",
         "¡Gracias por participar!",
@@ -217,7 +217,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
         "Está bien no saberlo todo, la respuesta era",
         "Parece que esta vez no se pudo. la respuesta es",
         "Gracias por participar",
-        "lo entiendo"
+        "lo entiendo"*/
     )
 
 
@@ -357,8 +357,10 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                                 setImageResource(gifListCorrect.get(randomGif))
                                 visibility = View.VISIBLE
                             }
+                            playSound(R.raw.correcto, holder)
                             holder.icono.visibility = View.GONE
-                            playSound(R.raw.audio1, holder)
+                            contadorRespuestasIncorrectas = 0
+
                         }
                         2 -> {
                             if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
@@ -376,7 +378,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                                     setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                                     visibility = View.VISIBLE
                                 }
-                                playSound(R.raw.audio1, holder)
+                                playSound(R.raw.incorrecto, holder)
                                 holder.icono.visibility =
                                     View.GONE  // Opcional: ocultar el ícono si es incorrecto
                                 contadorRespuestasIncorrectas = 0
@@ -403,7 +405,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                                     setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                                     visibility = View.VISIBLE
                                 }
-                                playSound(R.raw.audio1, holder)
+                                playSound(R.raw.incorrecto, holder)
                                 holder.icono.visibility =
                                     View.GONE  // Opcional: ocultar el ícono si es incorrecto
                                 contadorRespuestasIncorrectas = 0// de casi correcto
@@ -431,7 +433,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                                 setImageResource(gifListIncorrect[randomGif])  // Asigna GIF de incorrecto
                                 visibility = View.VISIBLE
                             }
-                            playSound(R.raw.audio1, holder)
+                            playSound(R.raw.incorrecto, holder)
                             holder.icono.visibility = View.GONE
                         }
                         5->{

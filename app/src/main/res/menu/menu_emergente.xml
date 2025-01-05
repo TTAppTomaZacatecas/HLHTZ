@@ -4,5 +4,8 @@
             android:title="Salir"/>
         <item android:id="@+id/menu_item_option2"
             android:title="Ayuda"/>
+        <item android:id="@+id/menu_item_option3"
+            android:title="Nuevo juego"/>
+
 
 </menu>
