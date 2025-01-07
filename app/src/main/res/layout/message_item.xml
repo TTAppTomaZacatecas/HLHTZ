@@ -32,7 +32,7 @@
         tools:visibility="visible" />
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -72,12 +72,13 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/send_round_box"
             android:backgroundTint="#653a13"
+            app:layout_constraintEnd_toEndOf="parent"
             android:padding="14dp"
             android:text="Aqui se va a mirar lo que el usuario ingrese"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
     <!-- Gif  de respuesta-->
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gifRespuesta"

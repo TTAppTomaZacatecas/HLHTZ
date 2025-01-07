@@ -276,7 +276,7 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
 
             }
             else -> {
-                variableRespuestaCorrecta = 6
+
                 // Acción para respuestas no reconocidas
                 println("Respuesta no válida. Por favor, proporciona una respuesta válida.")
 
@@ -332,7 +332,14 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                     text = currentMessage.message
                     visibility = View.VISIBLE
                 }
-                holder.imgGif.visibility = View.GONE
+                holder.imgGif.apply {
+                    setImageResource(gifList.get(randomGif))
+
+                    visibility =View.GONE
+
+
+                }
+
                 holder.tv_message.visibility = View.GONE
                 //Seleccionar y mostrar un GIF aleatorio solo para el primer mensaje
                 if (position == 0) {
@@ -355,14 +362,16 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                         visibility= View.VISIBLE
                     }
                     holder.respuesta.visibility = View.GONE
+
                     when (variableRespuestaCorrecta){
                         1 -> {
                             holder.respuesta.apply {
                                 setImageResource(gifListCorrect.get(randomGif))
                                 visibility = View.VISIBLE
                             }
+
                             playSound(R.raw.correcto, holder)
-                            playSound(R.raw.correcto, holder)
+
                             holder.icono.visibility = View.GONE
                             contadorRespuestasIncorrectas = 0
 
@@ -372,7 +381,6 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                             if (contadorRespuestasIncorrectas < numMaxRespuestasIncorrectasPermitidas) {
                                 Log.d("PatronMatching1", "AQUI DEBERIA CONTAR")
                                 contadorRespuestasIncorrectas++
-                                holder.imgGif.visibility = View.GONE
                                 holder.respuesta.visibility = View.GONE
                                 Log.d(
                                     "PatronMatching2",
@@ -454,9 +462,6 @@ class MessagingAdapter : RecyclerView.Adapter<MessagingAdapter.MessageViewHolder
                             }
 
 
-                        }
-                        6 -> {
-                            println("No tiene patron1")
                         }
                         else-> println("Número no reconocido")
 
